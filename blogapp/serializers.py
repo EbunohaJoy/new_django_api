@@ -4,6 +4,14 @@ from django.contrib.auth import get_user_model
 from .models import Blog
 
 
+
+class UpdateUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "email", "username", "first_name","last_name","bio","profile_picture","facebook","youtube","instagram","twitter"]
+        
+        
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -27,8 +35,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         new_user.save()
         return new_user
     
+class SimpleAuthurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "username", "first_name", "last_name"]
     
+    
+      
 class BlogSerializer(serializers.ModelSerializer):
+    authur = SimpleAuthurSerializer(read_only=True)
     class Meta:
         model = Blog
         fields = ['id', 'title', 'slug', 'authur', 'category', 'content', 'featured_image', 'published_date', 'created_at', 'updated_at', 'is_draft']
